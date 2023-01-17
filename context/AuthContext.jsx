@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [id, setId] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
           email: email,
           password: password,
           access_token: "321321",
+          role: "admin",
         },
       ];
 
@@ -55,6 +57,11 @@ export const AuthProvider = ({ children }) => {
     }, 500);
   };
 
+  const deletePost = (value) => {
+    setDeleteModal(false);
+    console.log(value);
+  };
+
   const passValue = (value) => {
     setId(value);
   };
@@ -65,6 +72,10 @@ export const AuthProvider = ({ children }) => {
 
   const setRegister = () => {
     setIsLogin(false);
+  };
+
+  const setDeleteModal = (value) => {
+    setShowDeleteModal(value);
   };
 
   return (
@@ -80,6 +91,9 @@ export const AuthProvider = ({ children }) => {
         isLogin,
         setLogin,
         setRegister,
+        showDeleteModal,
+        setDeleteModal,
+        deletePost,
       }}
     >
       {children}

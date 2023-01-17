@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Touchable,
+} from "react-native";
 
 import { StyleSheet } from "react-native";
 import { globalStyles } from "../styles/Global";
+import { AuthContext } from "../context/AuthContext";
+
+import DeletePostModal from "./DeletePostModal";
 
 export default function NewPosts({ navigation, handleClick }) {
   const url = `https://jsonplaceholder.typicode.com/posts/`;
+  const { showDeleteModal, setDeleteModal, passValue, id } =
+    useContext(AuthContext);
 
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
@@ -43,10 +54,20 @@ export default function NewPosts({ navigation, handleClick }) {
                     ? `${item.body.slice(0, 50)} [...]`
                     : item.body}
                 </Text>
+                <TouchableOpacity
+                  style={styles.deletePostBtn}
+                  onPress={() => {
+                    setDeleteModal(true);
+                    passValue(item.id);
+                  }}
+                >
+                  <Text style={styles.deletePostBtnText}>X</Text>
+                </TouchableOpacity>
               </View>
             </TouchableOpacity>
           )}
         />
+        {showDeleteModal && <DeletePostModal id={id} />}
       </View>
     );
   }
@@ -80,5 +101,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 20,
+  },
+  deletePostBtn: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 10,
+  },
+  deletePostBtnText: {
+    color: "#969696",
   },
 });

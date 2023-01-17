@@ -5,6 +5,7 @@ import HomeStack from "./routes/HomeStack";
 import { View, Text } from "react-native";
 
 import { AuthProvider } from "./context/AuthContext";
+import { ModalPortal } from "react-native-modals";
 import Home from "./components/Home";
 
 const getFonts = () =>
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <AuthProvider>
       <HomeStack />
+      <ModalPortal />
     </AuthProvider>
   );
 }

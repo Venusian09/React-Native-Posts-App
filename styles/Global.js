@@ -23,4 +23,7 @@ export const globalStyles = StyleSheet.create({
     marginVertical: 8,
     lineHeight: 20,
   },
+  center: {
+    textAlign: "center",
+  },
 });
