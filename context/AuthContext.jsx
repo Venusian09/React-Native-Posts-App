@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [id, setId] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAddPost, setShowAddPost] = useState(false);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -19,8 +20,10 @@ export const AuthProvider = ({ children }) => {
           name: name,
           lastName: lastName,
           email: email,
+          user_id: 1,
           password: password,
           access_token: "321321",
+          role: "admin",
         },
       ];
       setUserInfo(userExampleInfo);
@@ -35,6 +38,9 @@ export const AuthProvider = ({ children }) => {
       let userExampleInfo = [
         {
           email: email,
+          name: "Kamil",
+          user_id: 1,
+          lastName: "Dębczak",
           password: password,
           access_token: "321321",
           role: "admin",
@@ -57,9 +63,23 @@ export const AuthProvider = ({ children }) => {
     }, 500);
   };
 
+  const addSinglePost = (value) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      let data = [
+        {
+          text: value,
+          author: userInfo[0].user_id,
+          date: new Date(),
+        },
+      ];
+      setIsLoading(false);
+      setShowAddPost(false);
+    }, 500);
+  };
+
   const deletePost = (value) => {
     setDeleteModal(false);
-    console.log(value);
   };
 
   const passValue = (value) => {
@@ -78,6 +98,10 @@ export const AuthProvider = ({ children }) => {
     setShowDeleteModal(value);
   };
 
+  const setAddPost = (value) => {
+    setShowAddPost(value);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -94,6 +118,9 @@ export const AuthProvider = ({ children }) => {
         showDeleteModal,
         setDeleteModal,
         deletePost,
+        showAddPost,
+        setAddPost,
+        addSinglePost,
       }}
     >
       {children}

@@ -1,14 +1,15 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { globalStyles } from "../styles/Global";
 
 import HomeSlider from "./HomeSlider";
 import NewPosts from "./NewPosts";
 import SinglePost from "./SinglePost";
+import AddPost from "./AddPost";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home({ navigation }) {
-  const { passValue } = useContext(AuthContext);
+  const { passValue, showAddPost, setAddPost } = useContext(AuthContext);
 
   function handleClick(value) {
     navigation.navigate("Singlepost");
@@ -18,8 +19,13 @@ export default function Home({ navigation }) {
   return (
     <View style={globalStyles.container}>
       <>
-        <HomeSlider />
-        <Text style={styles.homePageTitle}>Najnowsze wpisy</Text>
+        <TouchableOpacity
+          style={[globalStyles.primaryBtn, styles.addBtn]}
+          onPress={() => setAddPost(true)}
+        >
+          <Text style={globalStyles.primaryBtnText}>Co słychać?</Text>
+        </TouchableOpacity>
+        {showAddPost && <AddPost />}
         <NewPosts handleClick={handleClick} />
       </>
     </View>
@@ -33,5 +39,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     marginTop: 30,
+  },
+  addBtn: {
+    width: "100%",
   },
 });

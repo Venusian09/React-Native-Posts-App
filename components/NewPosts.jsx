@@ -47,8 +47,8 @@ export default function NewPosts({ navigation, handleClick }) {
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleClick(item.id)}>
               <View style={styles.singlePost}>
-                <Text style={styles.textAuthor}>Imię nazwisko</Text>
-                <Text style={styles.textDate}>21.37.1337</Text>
+                <Text style={globalStyles.textAuthor}>Imię nazwisko</Text>
+                <Text style={globalStyles.smallGrey}>21.37.1337</Text>
                 <Text>
                   {item.body.length > 50
                     ? `${item.body.slice(0, 50)} [...]`
@@ -88,15 +88,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     marginBottom: 12,
     padding: 20,
-  },
-  textAuthor: {
-    fontWeight: "bold",
-    fontSize: 15,
-  },
-  textDate: {
-    color: "#383838",
-    fontSize: 13,
-    marginBottom: 5,
   },
   container: {
     flex: 1,
