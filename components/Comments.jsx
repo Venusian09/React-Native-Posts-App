@@ -10,6 +10,14 @@ export default function Comments() {
         <Text style={styles.textAuthor}>Imię nazwisko</Text>
         <Text style={styles.textBody}>Ale jazda!</Text>
       </View>
+      <View style={styles.commentBox}>
+        <Text style={styles.textAuthor}>Imię nazwisko</Text>
+        <Text style={styles.textBody}>Ale jazda!</Text>
+      </View>
+      <View style={styles.commentBox}>
+        <Text style={styles.textAuthor}>Imię nazwisko</Text>
+        <Text style={styles.textBody}>Ale jazda!</Text>
+      </View>
     </View>
   );
 }
@@ -22,10 +30,14 @@ const styles = StyleSheet.create({
   textBody: {
     fontSize: 15,
   },
+  commentsWrapper: {
+    marginTop: 20,
+  },
   commentBox: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: "#f0f2f5",
     borderRadius: 18,
+    marginBottom: 12,
   },
 });

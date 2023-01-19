@@ -13,11 +13,11 @@ import { globalStyles } from "../styles/Global";
 
 import Spinner from "react-native-loading-spinner-overlay/lib";
 
-export default function LoginUser({ navigation }) {
+export default function LoginUser() {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
-  const { userInfo, isLoading, login } = useContext(AuthContext);
+  const { isLoading, login } = useContext(AuthContext);
 
   return (
     <View>
@@ -72,7 +72,6 @@ const style = StyleSheet.create({
   },
   button: {
     backgroundColor: "#707eff",
-    width: "70%",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: "50%",
