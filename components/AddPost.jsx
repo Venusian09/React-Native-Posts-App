@@ -64,7 +64,7 @@ export default function AddPost() {
         <ModalContent style={styles.fullWidth}>
           <View style={styles.userInfo}>
             <Text style={globalStyles.textAuthor}>
-              {userInfo[0].name} {userInfo[0].lastName}
+              {userInfo.user.firstname} {userInfo.user.lastname}
             </Text>
             <Text style={globalStyles.smallGrey}>Z nami od: 21.37.1337</Text>
           </View>

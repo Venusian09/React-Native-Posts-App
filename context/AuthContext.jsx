@@ -2,6 +2,9 @@ import React, { createContext, useState, useEffect } from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { BASE_URL } from "../config";
+import axios from "axios";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,46 +14,51 @@ export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddPost, setShowAddPost] = useState(false);
-
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
-    setTimeout(() => {
-      let userExampleInfo = [
-        {
-          name: name,
-          lastName: lastName,
-          email: email,
-          user_id: 1,
-          password: password,
-          access_token: "321321",
-          role: "admin",
-        },
-      ];
-      setUserInfo(userExampleInfo);
-      AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
-      setIsLoading(false);
-    }, 500);
+    const ob = {
+      firstname: name,
+      lastname: lastName,
+      email: email,
+      password: password,
+    };
+    fetch(`${BASE_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ob),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        login(res.email, res.password);
+      })
+      .catch((e) => alert(`error ${e}`));
+    // setUserInfo(userExampleInfo);
+    // AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+    setIsLoading(false);
   };
 
   const login = (email, password) => {
     setIsLoading(true);
-    setTimeout(() => {
-      let userExampleInfo = [
-        {
-          email: email,
-          name: "Kamil",
-          user_id: 1,
-          lastName: "Dębczak",
-          password: password,
-          access_token: "321321",
-          role: "admin",
-        },
-      ];
-
-      setUserInfo(userExampleInfo);
-      AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
-      setIsLoading(false);
-    }, 500);
+    let ob = {
+      email: email,
+      password: password,
+    };
+    fetch(`${BASE_URL}/users/authenticate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ob),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setUserInfo(res);
+        AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+      })
+      .catch((e) => alert(`Błąd: ${e}`));
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -69,7 +77,7 @@ export const AuthProvider = ({ children }) => {
       let data = [
         {
           text: value,
-          author: userInfo[0].user_id,
+          author: userInfo.user._id,
           date: new Date(),
         },
       ];

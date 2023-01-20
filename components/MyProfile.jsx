@@ -11,7 +11,9 @@ export default function MyProfile() {
     <View style={globalStyles.container}>
       <Spinner visible={isLoading} />
       <View style={style.profileTop}>
-        <Text style={globalStyles.titleText}>Witaj {userInfo[0].name}</Text>
+        <Text style={globalStyles.titleText}>
+          Witaj {userInfo.user.firstname}
+        </Text>
         <TouchableOpacity onPress={logout}>
           <Text style={style.logout}>Wyloguj się</Text>
         </TouchableOpacity>

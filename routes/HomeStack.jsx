@@ -25,6 +25,7 @@ const navigationRef = createNavigationContainerRef();
 
 const HomeStack = () => {
   const { userInfo } = useContext(AuthContext);
+  console.log(userInfo);
 
   return (
     <NavigationContainer>
@@ -52,7 +53,7 @@ const HomeStack = () => {
           },
         })}
       >
-        {typeof userInfo[0] !== "undefined" && userInfo[0].access_token ? (
+        {userInfo.token ? (
           <>
             <Stack.Screen name="Tablica" component={Home} />
             <Stack.Screen name="Profil" component={MyProfile} />
