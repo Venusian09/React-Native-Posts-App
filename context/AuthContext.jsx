@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddPost, setShowAddPost] = useState(false);
   const [backScreen, setBackScreen] = useState("Tablica");
+  const [showEditAccount, setShowEditAccount] = useState(false);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -109,6 +110,19 @@ export const AuthProvider = ({ children }) => {
     }, 500);
   };
 
+  const editAccountDetails = (name, lastname, email, password) => {
+    setIsLoading(true);
+    let ob = {
+      name: name,
+      lastname: lastname,
+      email: email,
+      password: password,
+    };
+    setShowEditAccount(false);
+    setIsLoading(false);
+    logout();
+  };
+
   const deletePost = (value) => {
     setDeleteModal(false);
     console.log(value);
@@ -156,6 +170,9 @@ export const AuthProvider = ({ children }) => {
         showPosts,
         backScreen,
         setBackScreen,
+        showEditAccount,
+        setShowEditAccount,
+        editAccountDetails,
       }}
     >
       {children}
