@@ -3,9 +3,17 @@ import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { globalStyles } from "../styles/Global";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { AuthContext } from "../context/AuthContext";
+import Posts from "./Posts";
 
-export default function MyProfile() {
-  const { userInfo, logout, isLoading } = useContext(AuthContext);
+export default function MyProfile({ navigation, handleClick }) {
+  const { userInfo, logout, isLoading, passValue, setBackScreen, backScreen } =
+    useContext(AuthContext);
+  function handleClick(value) {
+    setBackScreen("Profil");
+    navigation.navigate("Singlepost");
+    passValue(value);
+  }
+  const url = `https://jsonplaceholder.typicode.com/posts/`;
 
   return (
     <View style={globalStyles.container}>
@@ -18,6 +26,7 @@ export default function MyProfile() {
           <Text style={style.logout}>Wyloguj się</Text>
         </TouchableOpacity>
       </View>
+      <Posts url={url} handleClick={handleClick} />
     </View>
   );
 }

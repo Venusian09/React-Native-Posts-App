@@ -3,7 +3,8 @@ import React, { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { BASE_URL } from "../config";
-import axios from "axios";
+
+import Posts from "../components/Posts";
 
 export const AuthContext = createContext();
 
@@ -14,6 +15,8 @@ export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddPost, setShowAddPost] = useState(false);
+  const [backScreen, setBackScreen] = useState("Tablica");
+
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
     const ob = {
@@ -31,9 +34,13 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        login(res.email, res.password);
+        if (!res.firstname) {
+          alert(res.message);
+        } else {
+          login(res.email, res.password);
+        }
       })
-      .catch((e) => alert(`error ${e}`));
+      .catch((e) => console.log(`error ${e}`));
     // setUserInfo(userExampleInfo);
     // AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
     setIsLoading(false);
@@ -54,8 +61,12 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setUserInfo(res);
-        AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+        if (!res.user) {
+          alert(res.message);
+        } else {
+          setUserInfo(res);
+          AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+        }
       })
       .catch((e) => alert(`Błąd: ${e}`));
     setIsLoading(false);
@@ -69,6 +80,18 @@ export const AuthProvider = ({ children }) => {
       setUserInfo({});
       setIsLoading(false);
     }, 500);
+  };
+
+  const showPosts = (url, setPosts) => {
+    setIsLoading(true);
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setPosts(data);
+      });
+    setIsLoading(false);
   };
 
   const addSinglePost = (value) => {
@@ -88,6 +111,7 @@ export const AuthProvider = ({ children }) => {
 
   const deletePost = (value) => {
     setDeleteModal(false);
+    console.log(value);
   };
 
   const passValue = (value) => {
@@ -129,6 +153,9 @@ export const AuthProvider = ({ children }) => {
         showAddPost,
         setAddPost,
         addSinglePost,
+        showPosts,
+        backScreen,
+        setBackScreen,
       }}
     >
       {children}

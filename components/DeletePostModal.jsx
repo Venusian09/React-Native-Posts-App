@@ -36,13 +36,13 @@ export default function DeletePostModal(id) {
                 deletePost(id);
               }}
             >
-              <Text style={styles.buttonDeleteText}>Tak!</Text>
+              <Text style={styles.buttonDeleteText}>Tak</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonDontDelete}
               onPress={() => setDeleteModal(false)}
             >
-              <Text>Nie!</Text>
+              <Text>Nie</Text>
             </TouchableOpacity>
           </View>
         </ModalContent>

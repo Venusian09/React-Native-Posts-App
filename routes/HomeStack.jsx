@@ -24,8 +24,7 @@ const Stack = createBottomTabNavigator();
 const navigationRef = createNavigationContainerRef();
 
 const HomeStack = () => {
-  const { userInfo } = useContext(AuthContext);
-  console.log(userInfo);
+  const { userInfo, backScreen } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
@@ -67,7 +66,7 @@ const HomeStack = () => {
                 },
                 headerLeft: () => (
                   <HeaderBackButton
-                    onPress={() => navigation.navigate("Tablica")}
+                    onPress={() => navigation.navigate(backScreen)}
                     label="Cofnij"
                   />
                 ),

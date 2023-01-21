@@ -9,9 +9,11 @@ import AddPost from "./AddPost";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home({ navigation }) {
-  const { passValue, showAddPost, setAddPost } = useContext(AuthContext);
+  const { passValue, showAddPost, setAddPost, backScreen, setBackScreen } =
+    useContext(AuthContext);
 
-  function handleClick(value) {
+  function handleClick(value, backScreenValue) {
+    setBackScreen("Tablica");
     navigation.navigate("Singlepost");
     passValue(value);
   }

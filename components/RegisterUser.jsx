@@ -44,6 +44,7 @@ export default function RegisterUser() {
           style={style.input}
           value={email}
           onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
         />
         <TextInput
           placeholder="Hasło"
@@ -51,6 +52,7 @@ export default function RegisterUser() {
           style={style.input}
           value={password}
           onChangeText={(text) => setPassword(text)}
+          autoCapitalize="none"
         />
         <TouchableOpacity
           style={style.button}
