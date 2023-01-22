@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import {
   NavigationContainer,
   createNavigationContainerRef,
@@ -7,6 +7,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HeaderBackButton } from "react-navigation-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { StyleSheet } from "react-native";
 
 import WelcomeScreen from "../components/WelcomeScreen.jsx";
 import LoginRegister from "../components/LoginRegister.jsx";
@@ -17,6 +18,7 @@ import Home from "../components/Home.jsx";
 import MyProfile from "../components/MyProfile.jsx";
 import Information from "../components/Information.jsx";
 import SinglePost from "../components/SinglePost.jsx";
+import UserSearch from "../components/UserSearch.jsx";
 
 import { AuthContext } from "../context/AuthContext.jsx";
 
@@ -24,7 +26,7 @@ const Stack = createBottomTabNavigator();
 const navigationRef = createNavigationContainerRef();
 
 const HomeStack = () => {
-  const { userInfo, backScreen } = useContext(AuthContext);
+  const { userInfo, backScreen, setShowUserSearch } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
@@ -45,6 +47,8 @@ const HomeStack = () => {
               iconName = focused ? "ios-log-in" : "ios-log-in-outline";
             } else if (route.name === "Zarejestruj się") {
               iconName = focused ? "ios-create" : "ios-create-outline";
+            } else if (route.name === "Użytkownicy") {
+              iconName = focused ? "ios-search" : "ios-search-outline";
             }
 
             // You can return any component that you like here!
@@ -56,6 +60,7 @@ const HomeStack = () => {
           <>
             <Stack.Screen name="Tablica" component={Home} />
             <Stack.Screen name="Profil" component={MyProfile} />
+            <Stack.Screen name="Użytkownicy" component={UserSearch} />
             <Stack.Screen name="Informacje" component={Information} />
             <Stack.Screen
               name="Singlepost"
@@ -123,3 +128,10 @@ const HomeStack = () => {
 };
 
 export default HomeStack;
+
+const styles = StyleSheet.create({
+  searchIcon: {
+    marginRight: 20,
+    fontSize: 16,
+  },
+});
