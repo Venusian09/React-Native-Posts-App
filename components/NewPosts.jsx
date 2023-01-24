@@ -11,7 +11,9 @@ import Posts from "./Posts";
 import DeletePostModal from "./DeletePostModal";
 
 export default function NewPosts({ navigation, handleClick }) {
-  const url = `https://jsonplaceholder.typicode.com/posts/`;
+  const [page, setPage = 1] = useState(1);
+
+  const url = `${BASE_URL}/posts?page=${page}`;
   const { showDeleteModal, setDeleteModal, passValue, id } =
     useContext(AuthContext);
 

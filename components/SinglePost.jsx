@@ -7,11 +7,11 @@ import { globalStyles } from "../styles/Global";
 import Comments from "./Comments";
 
 export default function SinglePost({ navigation }) {
-  const { id, passValue } = useContext(AuthContext);
+  const { singlePost, passValue, id } = useContext(AuthContext);
   const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
-
+  console.log(singlePost);
   useEffect(() => {
     fetch(url, {
       method: "GET",
@@ -31,9 +31,13 @@ export default function SinglePost({ navigation }) {
   } else if (post) {
     return (
       <View style={globalStyles.container}>
-        <Text>ID: {post.id}</Text>
-        <Text>Title: {post.title}</Text>
-        <Text>Opis: {post.body}</Text>
+        <Text style={globalStyles.textAuthor}>
+          {singlePost.postedBy.firstname} {singlePost.postedBy.lastname}
+        </Text>
+        <Text style={globalStyles.smallGrey}>
+          {singlePost.created.slice(0, 10)}
+        </Text>
+        <Text>{singlePost.content}</Text>
         <Comments />
       </View>
     );

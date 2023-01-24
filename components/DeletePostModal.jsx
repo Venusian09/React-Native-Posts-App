@@ -11,8 +11,8 @@ import { globalStyles } from "../styles/Global";
 
 import { AuthContext } from "../context/AuthContext";
 
-export default function DeletePostModal(id) {
-  const { setDeleteModal, deletePost } = useContext(AuthContext);
+export default function DeletePostModal() {
+  const { setDeleteModal, deletePost, deletePostId } = useContext(AuthContext);
   return (
     <View>
       <Modal
@@ -26,14 +26,14 @@ export default function DeletePostModal(id) {
       >
         <ModalContent>
           <Text style={globalStyles.center}>
-            Czy na pewno chcesz usunąć ten wpis?
+            Czy na pewno chcesz usunąć ten wpis? {deletePostId}
           </Text>
           <View style={styles.deleteBtns}>
             <TouchableOpacity
               style={styles.buttonDelete}
               onPress={() => {
                 setDeleteModal(false);
-                deletePost(id);
+                deletePost(deletePostId);
               }}
             >
               <Text style={styles.buttonDeleteText}>Tak</Text>

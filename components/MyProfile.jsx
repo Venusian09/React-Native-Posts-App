@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { globalStyles } from "../styles/Global";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { AuthContext } from "../context/AuthContext";
+import { BASE_URL } from "../config";
 
 import Posts from "./Posts";
 import EditAccount from "./EditAccount";
@@ -23,8 +24,7 @@ export default function MyProfile({ navigation, handleClick }) {
     navigation.navigate("Singlepost");
     passValue(value);
   }
-  const url = `https://jsonplaceholder.typicode.com/posts/`;
-  console.log(showEditAccount);
+  const url = `${BASE_URL}/users/user/${userInfo.user._id}/posts`;
 
   return (
     <View style={globalStyles.container}>

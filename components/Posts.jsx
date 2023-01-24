@@ -6,8 +6,18 @@ import { globalStyles } from "../styles/Global";
 import DeletePostModal from "./DeletePostModal";
 
 export default function Posts({ url, handleClick }) {
-  const { showDeleteModal, setDeleteModal, passValue, id, userInfo } =
-    useContext(AuthContext);
+  const {
+    showDeleteModal,
+    setDeleteModal,
+    passValue,
+    id,
+    userInfo,
+    setDeletePostId,
+    deletePostId,
+    isLoading,
+  } = useContext(AuthContext);
+
+  const token = userInfo.token;
 
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
@@ -16,6 +26,7 @@ export default function Posts({ url, handleClick }) {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
@@ -27,40 +38,57 @@ export default function Posts({ url, handleClick }) {
           setError(error);
         }
       );
-  }, []);
+  }, [deletePostId, isLoading]);
   if (error) {
     return <Text>API ERROR</Text>;
-  } else {
-    return (
-      <View>
-        <FlatList
-          data={posts}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleClick(item.id)}>
-              <View style={styles.singlePost}>
-                <Text style={globalStyles.textAuthor}>Imię nazwisko</Text>
-                <Text style={globalStyles.smallGrey}>21.37.1337</Text>
-                <Text>
-                  {item.body.length > 50
-                    ? `${item.body.slice(0, 50)} [...]`
-                    : item.body}
-                </Text>
-                <TouchableOpacity
-                  style={styles.deletePostBtn}
-                  onPress={() => {
-                    setDeleteModal(true);
-                    passValue(item.id);
-                  }}
-                >
-                  <Text style={styles.deletePostBtnText}>X</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-        {showDeleteModal && <DeletePostModal id={id} />}
-      </View>
-    );
+  } else if (posts) {
+    if (posts.docs.length > 0) {
+      return (
+        <View>
+          <FlatList
+            data={posts.docs}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleClick(item)}>
+                <View style={styles.singlePost}>
+                  <Text style={globalStyles.textAuthor}>
+                    {item.postedBy.firstname} {item.postedBy.lastname}
+                  </Text>
+                  <Text style={globalStyles.smallGrey}>
+                    {item.created.slice(0, 10)}
+                  </Text>
+                  <Text>
+                    {item.content.length > 50
+                      ? `${item.content.slice(0, 50)} [...]`
+                      : item.content}
+                  </Text>
+                  {userInfo.user.role.includes("Admin", 0) ||
+                  item.postedBy._id == userInfo.user._id ? (
+                    <TouchableOpacity
+                      style={styles.deletePostBtn}
+                      onPress={() => {
+                        setDeleteModal(true);
+                        setDeletePostId(item.id);
+                      }}
+                    >
+                      <Text style={styles.deletePostBtnText}>X</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    ""
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+          {showDeleteModal && <DeletePostModal />}
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Text>Brak wpisów</Text>
+        </View>
+      );
+    }
   }
 }
 
@@ -92,5 +120,9 @@ const styles = StyleSheet.create({
   },
   deletePostBtnText: {
     color: "#969696",
+    position: "absolute",
+    top: 0,
+    right: 5,
+    padding: 10,
   },
 });

@@ -1,13 +1,9 @@
 import React, { useState, useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import {
-  NavigationContainer,
-  createNavigationContainerRef,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HeaderBackButton } from "react-navigation-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
 
 import WelcomeScreen from "../components/WelcomeScreen.jsx";
 import LoginRegister from "../components/LoginRegister.jsx";
@@ -23,10 +19,9 @@ import UserSearch from "../components/UserSearch.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 
 const Stack = createBottomTabNavigator();
-const navigationRef = createNavigationContainerRef();
 
 const HomeStack = () => {
-  const { userInfo, backScreen, setShowUserSearch } = useContext(AuthContext);
+  const { userInfo, backScreen } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
@@ -128,10 +123,3 @@ const HomeStack = () => {
 };
 
 export default HomeStack;
-
-const styles = StyleSheet.create({
-  searchIcon: {
-    marginRight: 20,
-    fontSize: 16,
-  },
-});

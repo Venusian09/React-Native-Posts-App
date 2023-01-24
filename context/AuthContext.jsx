@@ -11,12 +11,14 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [id, setId] = useState(null);
+  const [singlePost, setSinglePost] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePostId, setDeletePostId] = useState(null);
   const [showAddPost, setShowAddPost] = useState(false);
   const [backScreen, setBackScreen] = useState("Tablica");
   const [showEditAccount, setShowEditAccount] = useState(false);
+  const [showSingleUser, setShowSingleUser] = useState(false);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }) => {
       email: email,
       password: password,
     };
+    console.log(ob);
     fetch(`${BASE_URL}/users`, {
       method: "POST",
       headers: {
@@ -35,10 +38,12 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         if (!res.firstname) {
           alert(res.message);
         } else {
-          login(res.email, res.password);
+          console.log(res.email, res.password);
+          login(email, password);
         }
       })
       .catch((e) => console.log(`error ${e}`));
@@ -62,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         if (!res.user) {
           alert(res.message);
         } else {
@@ -97,17 +103,25 @@ export const AuthProvider = ({ children }) => {
 
   const addSinglePost = (value) => {
     setIsLoading(true);
-    setTimeout(() => {
-      let data = [
-        {
-          text: value,
-          author: userInfo.user._id,
-          date: new Date(),
-        },
-      ];
-      setIsLoading(false);
-      setShowAddPost(false);
-    }, 500);
+    const url = `${BASE_URL}/posts`;
+    const ob = {
+      content: value,
+    };
+    console.log(ob);
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(ob),
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setIsLoading(false);
+        setShowAddPost(false);
+      });
   };
 
   const editAccountDetails = (name, lastname, email, password) => {
@@ -124,12 +138,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   const deletePost = (value) => {
-    setDeleteModal(false);
-    console.log(value);
+    const url = `${BASE_URL}/posts/${value}`;
+
+    if (setDeletePostId) {
+      fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      })
+        .then((res) => res.text()) // or res.json()
+        .then((res) => {
+          setDeleteModal(false);
+          setDeletePostId(null);
+        });
+    }
   };
 
   const passValue = (value) => {
-    setId(value);
+    setSinglePost(value);
   };
 
   const setLogin = () => {
@@ -157,7 +184,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         passValue,
-        id,
+        singlePost,
         isLogin,
         setLogin,
         setRegister,
@@ -173,6 +200,10 @@ export const AuthProvider = ({ children }) => {
         showEditAccount,
         setShowEditAccount,
         editAccountDetails,
+        showSingleUser,
+        setShowSingleUser,
+        deletePostId,
+        setDeletePostId,
       }}
     >
       {children}
