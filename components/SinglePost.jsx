@@ -11,7 +11,6 @@ export default function SinglePost({ navigation }) {
   const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
-  console.log(singlePost);
   useEffect(() => {
     fetch(url, {
       method: "GET",
@@ -38,7 +37,7 @@ export default function SinglePost({ navigation }) {
           {singlePost.created.slice(0, 10)}
         </Text>
         <Text>{singlePost.content}</Text>
-        <Comments />
+        <Comments postId={singlePost._id} />
       </View>
     );
   }

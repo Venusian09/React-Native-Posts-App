@@ -24,7 +24,7 @@ export default function MyProfile({ navigation, handleClick }) {
     navigation.navigate("Singlepost");
     passValue(value);
   }
-  const url = `${BASE_URL}/users/user/${userInfo.user._id}/posts`;
+  const url = `${BASE_URL}/users/user/${userInfo.user._id}/posts?page=`;
 
   return (
     <View style={globalStyles.container}>
@@ -50,7 +50,7 @@ export default function MyProfile({ navigation, handleClick }) {
         <Text style={[globalStyles.titleText, styles.userPostsText]}>
           Twoje wpisy:
         </Text>
-        <Posts url={url} handleClick={handleClick} />
+        <Posts url={url} handleClick={handleClick} style={styles.posts} />
       </View>
     </View>
   );
@@ -70,8 +70,12 @@ const styles = StyleSheet.create({
   },
   userPosts: {
     marginTop: 20,
+    paddingBottom: 150,
   },
   userPostsText: {
     marginBottom: 20,
+  },
+  posts: {
+    marginBottom: 80,
   },
 });

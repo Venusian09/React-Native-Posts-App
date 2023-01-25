@@ -1,5 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { StyleSheet } from "react-native";
 import { globalStyles } from "../styles/Global";
@@ -19,10 +25,18 @@ export default function Posts({ url, handleClick }) {
 
   const token = userInfo.token;
 
+  const [data, setData] = useState(null);
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [stopPagination, setStopPagination] = useState(false);
+  const fetchMoreData = () => {
+    if (data.nextPage) {
+      setPage(page + 1);
+    }
+  };
   useEffect(() => {
-    fetch(url, {
+    fetch(url + page, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -32,21 +46,36 @@ export default function Posts({ url, handleClick }) {
       .then((response) => response.json())
       .then(
         (data) => {
-          setPosts(data);
+          if (!stopPagination) {
+            setData(data);
+            if (page == 1) {
+              setPosts([...data.docs]);
+            } else if (page > 1) {
+              setPosts([...posts, ...data.docs]);
+            }
+            if (page == data.totalPages) {
+              setStopPagination(true);
+            }
+          }
         },
         (error) => {
           setError(error);
         }
       );
-  }, [deletePostId, isLoading]);
+  }, [deletePostId, isLoading, page]);
+
   if (error) {
     return <Text>API ERROR</Text>;
   } else if (posts) {
-    if (posts.docs.length > 0) {
+    if (posts.length > 0) {
       return (
         <View>
           <FlatList
-            data={posts.docs}
+            keyExtractor={(item) => {
+              item._id;
+            }}
+            data={posts}
+            contentContainerStyle={{ paddingBottom: 80, marginBottom: 81000 }}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleClick(item)}>
                 <View style={styles.singlePost}>
@@ -78,8 +107,11 @@ export default function Posts({ url, handleClick }) {
                 </View>
               </TouchableOpacity>
             )}
+            onEndReachedThreshold={0.2}
+            onEndReached={fetchMoreData}
           />
           {showDeleteModal && <DeletePostModal />}
+          <Text>Paginacja</Text>
         </View>
       );
     } else {

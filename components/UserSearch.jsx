@@ -7,7 +7,7 @@ import { globalStyles } from "../styles/Global";
 import UserList from "./UserList";
 import { AuthContext } from "../context/AuthContext";
 
-export default function UserSearch() {
+export default function UserSearch({ navigation }) {
   const [text, setText] = useState(null);
   const { userInfo } = useContext(AuthContext);
   const [users, setUsers] = useState(null);
@@ -20,8 +20,6 @@ export default function UserSearch() {
     const ob = {
       query: text,
     };
-
-    console.log(ob);
 
     if (text) {
       fetch(url, {
@@ -52,7 +50,7 @@ export default function UserSearch() {
         placeholder="Znajdź użytkownika"
         multiline={true}
       />
-      {text && <UserList users={users} />}
+      {text && <UserList users={users} navigation={navigation} />}
     </View>
   );
 }

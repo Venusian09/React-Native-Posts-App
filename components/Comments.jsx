@@ -1,25 +1,61 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { FlatList, Text, View } from "react-native";
 
 import { StyleSheet } from "react-native";
+import CommentsForm from "./CommentsForm";
+import { BASE_URL } from "../config";
+import { AuthContext } from "../context/AuthContext";
 
-export default function Comments() {
-  return (
-    <View style={styles.commentsWrapper}>
-      <View style={styles.commentBox}>
-        <Text style={styles.textAuthor}>Imię nazwisko</Text>
-        <Text style={styles.textBody}>Ale jazda!</Text>
-      </View>
-      <View style={styles.commentBox}>
-        <Text style={styles.textAuthor}>Imię nazwisko</Text>
-        <Text style={styles.textBody}>Ale jazda!</Text>
-      </View>
-      <View style={styles.commentBox}>
-        <Text style={styles.textAuthor}>Imię nazwisko</Text>
-        <Text style={styles.textBody}>Ale jazda!</Text>
-      </View>
-    </View>
-  );
+export default function Comments({ postId }) {
+  const { userInfo, singlePost, addComment } = useContext(AuthContext);
+  const token = userInfo.token;
+  const url = `${BASE_URL}/posts/${postId}/comments`;
+  const [comments, setComments] = useState(null);
+
+  useEffect(() => {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        setComments(res.docs);
+        console.log(comments);
+      });
+  }, [singlePost, addComment]);
+
+  if (comments) {
+    return (
+      <>
+        <CommentsForm postId={postId} />
+        {comments.length == 0 ? (
+          <View>
+            <Text>Brak komentarzy. Bądź pierwszy i skomentuj juz teraz!</Text>
+          </View>
+        ) : (
+          <View>
+            <FlatList
+              data={comments}
+              renderItem={({ item }) => (
+                <View>
+                  <View style={styles.commentsWrapper}>
+                    <View style={styles.commentBox}>
+                      {console.log(item)}
+                      <Text style={styles.textAuthor}>Imię nazwisko</Text>
+                      <Text style={styles.textBody}>{item.content}</Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        )}
+      </>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

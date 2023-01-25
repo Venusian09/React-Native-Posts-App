@@ -13,7 +13,7 @@ import DeletePostModal from "./DeletePostModal";
 export default function NewPosts({ navigation, handleClick }) {
   const [page, setPage = 1] = useState(1);
 
-  const url = `${BASE_URL}/posts?page=${page}`;
+  const url = `${BASE_URL}/posts?page=`;
   const { showDeleteModal, setDeleteModal, passValue, id } =
     useContext(AuthContext);
 

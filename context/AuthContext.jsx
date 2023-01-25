@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [backScreen, setBackScreen] = useState("Tablica");
   const [showEditAccount, setShowEditAccount] = useState(false);
   const [showSingleUser, setShowSingleUser] = useState(false);
+  const [addComment, setAddComment] = useState(false);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -175,6 +176,10 @@ export const AuthProvider = ({ children }) => {
     setShowAddPost(value);
   };
 
+  const passComment = (value) => {
+    setAddComment(value);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -204,6 +209,9 @@ export const AuthProvider = ({ children }) => {
         setShowSingleUser,
         deletePostId,
         setDeletePostId,
+        addComment,
+        setAddComment,
+        passComment,
       }}
     >
       {children}

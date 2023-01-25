@@ -21,9 +21,16 @@ import { BASE_URL } from "../config";
 
 const width = Dimensions.get("window").width;
 
-export default function SingleUser({ user }) {
-  console.log(user);
-  const { showSingleUser, setShowSingleUser } = useContext(AuthContext);
+export default function SingleUser({ user, navigation }) {
+  const { showSingleUser, setShowSingleUser, setBackScreen, passValue } =
+    useContext(AuthContext);
+
+  function handleClick(value) {
+    setBackScreen("Użytkownicy");
+    navigation.navigate("Singlepost");
+    passValue(value);
+    setShowSingleUser(false);
+  }
   const url = `${BASE_URL}/users/user/${user._id}/posts`;
   return (
     <View>
@@ -55,7 +62,7 @@ export default function SingleUser({ user }) {
             <Text style={globalStyles.smallGrey}>
               Z nami od: {user.joined.slice(0, 10)}
             </Text>
-            <Posts url={url} />
+            <Posts url={url} handleClick={handleClick} />
           </View>
         </ModalContent>
       </Modal>

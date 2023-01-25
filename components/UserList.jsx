@@ -11,7 +11,7 @@ import { globalStyles } from "../styles/Global";
 import { AuthContext } from "../context/AuthContext";
 import SingleUser from "./SingleUser";
 
-export default function UserList({ users }) {
+export default function UserList({ users, navigation }) {
   const { showSingleUser, setShowSingleUser, userInfo } =
     useContext(AuthContext);
   const [singleUser, setSingleUser] = useState(null);
@@ -46,7 +46,9 @@ export default function UserList({ users }) {
               </View>
             )}
           />
-          {showSingleUser && <SingleUser user={singleUser} />}
+          {showSingleUser && (
+            <SingleUser user={singleUser} navigation={navigation} />
+          )}
         </View>
       );
     } else {
