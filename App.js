@@ -8,15 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ModalPortal } from "react-native-modals";
 import Home from "./components/Home";
 
-const getFonts = () =>
-  Font.loadAsync({
-    "nunito-regular": require("./assets/fonts/NunitoSans-Regular.ttf"),
-    "nunito-bold": require("./assets/fonts/NunitoSans-Bold.ttf"),
-  });
-
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
   return (
     <AuthProvider>
       <HomeStack />

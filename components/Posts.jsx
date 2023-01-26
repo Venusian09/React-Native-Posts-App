@@ -21,6 +21,10 @@ export default function Posts({ url, handleClick }) {
     setDeletePostId,
     deletePostId,
     isLoading,
+    newPost,
+    setNewPost,
+    removePostId,
+    setRemovePostId,
   } = useContext(AuthContext);
 
   const token = userInfo.token;
@@ -36,6 +40,19 @@ export default function Posts({ url, handleClick }) {
     }
   };
   useEffect(() => {
+    if (removePostId) {
+      const index = posts.findIndex((obj) => obj._id === removePostId);
+      console.log(index);
+      setPosts([...posts.slice(0, index), ...posts.slice(index + 1)]);
+      setRemovePostId(null);
+    }
+    if (newPost) {
+      setPage(1);
+      setPosts(null);
+      setData(null);
+      setStopPagination(false);
+      setNewPost(false);
+    }
     fetch(url + page, {
       method: "GET",
       headers: {
@@ -63,6 +80,7 @@ export default function Posts({ url, handleClick }) {
         }
       );
   }, [deletePostId, isLoading, page]);
+  console.log(removePostId);
 
   if (error) {
     return <Text>API ERROR</Text>;
@@ -111,7 +129,6 @@ export default function Posts({ url, handleClick }) {
             onEndReached={fetchMoreData}
           />
           {showDeleteModal && <DeletePostModal />}
-          <Text>Paginacja</Text>
         </View>
       );
     } else {

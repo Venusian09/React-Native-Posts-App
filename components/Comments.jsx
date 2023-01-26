@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Text, View, TouchableOpacity } from "react-native";
 
 import { StyleSheet } from "react-native";
 import CommentsForm from "./CommentsForm";
@@ -7,7 +7,8 @@ import { BASE_URL } from "../config";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Comments({ postId }) {
-  const { userInfo, singlePost, addComment } = useContext(AuthContext);
+  const { userInfo, singlePost, addComment, deletePostComment } =
+    useContext(AuthContext);
   const token = userInfo.token;
   const url = `${BASE_URL}/posts/${postId}/comments`;
   const [comments, setComments] = useState(null);
@@ -23,7 +24,6 @@ export default function Comments({ postId }) {
       .then((response) => response.json())
       .then((res) => {
         setComments(res.docs);
-        console.log(comments);
       });
   }, [singlePost, addComment]);
 
@@ -32,7 +32,7 @@ export default function Comments({ postId }) {
       <>
         <CommentsForm postId={postId} />
         {comments.length == 0 ? (
-          <View>
+          <View style={styles.noComments}>
             <Text>Brak komentarzy. Bądź pierwszy i skomentuj juz teraz!</Text>
           </View>
         ) : (
@@ -43,9 +43,14 @@ export default function Comments({ postId }) {
                 <View>
                   <View style={styles.commentsWrapper}>
                     <View style={styles.commentBox}>
-                      {console.log(item)}
                       <Text style={styles.textAuthor}>Imię nazwisko</Text>
                       <Text style={styles.textBody}>{item.content}</Text>
+                      <TouchableOpacity
+                        style={styles.deleteBtn}
+                        onPress={() => deletePostComment(item._id, item.post)}
+                      >
+                        <Text>X</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>
@@ -75,5 +80,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f2f5",
     borderRadius: 18,
     marginBottom: 12,
+  },
+  deleteBtn: {
+    position: "absolute",
+    right: 10,
+    top: 0,
+    padding: 8,
+  },
+  noComments: {
+    marginTop: 20,
   },
 });

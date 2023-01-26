@@ -20,6 +20,8 @@ export const AuthProvider = ({ children }) => {
   const [showEditAccount, setShowEditAccount] = useState(false);
   const [showSingleUser, setShowSingleUser] = useState(false);
   const [addComment, setAddComment] = useState(false);
+  const [newPost, setNewPost] = useState(false);
+  const [removePostId, setRemovePostId] = useState(null);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -29,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       email: email,
       password: password,
     };
-    console.log(ob);
     fetch(`${BASE_URL}/users`, {
       method: "POST",
       headers: {
@@ -43,7 +44,6 @@ export const AuthProvider = ({ children }) => {
         if (!res.firstname) {
           alert(res.message);
         } else {
-          console.log(res.email, res.password);
           login(email, password);
         }
       })
@@ -68,7 +68,6 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (!res.user) {
           alert(res.message);
         } else {
@@ -108,7 +107,6 @@ export const AuthProvider = ({ children }) => {
     const ob = {
       content: value,
     };
-    console.log(ob);
     fetch(url, {
       method: "POST",
       body: JSON.stringify(ob),
@@ -119,7 +117,7 @@ export const AuthProvider = ({ children }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        setNewPost(true);
         setIsLoading(false);
         setShowAddPost(false);
       });
@@ -127,12 +125,32 @@ export const AuthProvider = ({ children }) => {
 
   const editAccountDetails = (name, lastname, email, password) => {
     setIsLoading(true);
+    const url = `${BASE_URL}/users/user/${userInfo.user._id}`;
+    console.log(url);
+
+    if (!password) {
+      password = undefined;
+    }
+
     let ob = {
-      name: name,
+      firstname: name,
       lastname: lastname,
       email: email,
       password: password,
     };
+    console.log(ob);
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ob),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+      });
     setShowEditAccount(false);
     setIsLoading(false);
     logout();
@@ -151,9 +169,24 @@ export const AuthProvider = ({ children }) => {
         .then((res) => res.text()) // or res.json()
         .then((res) => {
           setDeleteModal(false);
+          setRemovePostId(value);
           setDeletePostId(null);
         });
     }
+  };
+
+  const deletePostComment = (commentId, postId) => {
+    console.log(commentId, postId);
+    const url = `${BASE_URL}/posts/${postId}/comments/${commentId}`;
+    const token = userInfo.token;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result));
   };
 
   const passValue = (value) => {
@@ -212,6 +245,11 @@ export const AuthProvider = ({ children }) => {
         addComment,
         setAddComment,
         passComment,
+        newPost,
+        setNewPost,
+        removePostId,
+        setRemovePostId,
+        deletePostComment,
       }}
     >
       {children}
