@@ -25,7 +25,7 @@ export default function Comments({ postId }) {
       .then((res) => {
         setComments(res.docs);
       });
-  }, [singlePost, addComment]);
+  }, [singlePost, addComment, deletePostComment]);
 
   if (comments) {
     return (

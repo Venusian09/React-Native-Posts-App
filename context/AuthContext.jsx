@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   const [addComment, setAddComment] = useState(false);
   const [newPost, setNewPost] = useState(false);
   const [removePostId, setRemovePostId] = useState(null);
+  const [deleteComment, setDeleteComment] = useState(1);
 
   const register = (name, lastName, email, password) => {
     setIsLoading(true);
@@ -40,7 +41,6 @@ export const AuthProvider = ({ children }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (!res.firstname) {
           alert(res.message);
         } else {
@@ -126,7 +126,6 @@ export const AuthProvider = ({ children }) => {
   const editAccountDetails = (name, lastname, email, password) => {
     setIsLoading(true);
     const url = `${BASE_URL}/users/user/${userInfo.user._id}`;
-    console.log(url);
 
     if (!password) {
       password = undefined;
@@ -138,7 +137,6 @@ export const AuthProvider = ({ children }) => {
       email: email,
       password: password,
     };
-    console.log(ob);
     fetch(url, {
       method: "PUT",
       headers: {
@@ -148,9 +146,7 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify(ob),
     })
       .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-      });
+      .then((result) => {});
     setShowEditAccount(false);
     setIsLoading(false);
     logout();
@@ -176,7 +172,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const deletePostComment = (commentId, postId) => {
-    console.log(commentId, postId);
     const url = `${BASE_URL}/posts/${postId}/comments/${commentId}`;
     const token = userInfo.token;
     fetch(url, {
@@ -184,9 +179,9 @@ export const AuthProvider = ({ children }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((result) => console.log(result));
+    }).then((res) => {
+      setDeleteComment(deleteComment + 1);
+    });
   };
 
   const passValue = (value) => {
@@ -250,6 +245,8 @@ export const AuthProvider = ({ children }) => {
         removePostId,
         setRemovePostId,
         deletePostComment,
+        deleteComment,
+        setDeleteComment,
       }}
     >
       {children}

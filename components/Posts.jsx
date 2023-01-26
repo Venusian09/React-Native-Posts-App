@@ -42,7 +42,6 @@ export default function Posts({ url, handleClick }) {
   useEffect(() => {
     if (removePostId) {
       const index = posts.findIndex((obj) => obj._id === removePostId);
-      console.log(index);
       setPosts([...posts.slice(0, index), ...posts.slice(index + 1)]);
       setRemovePostId(null);
     }
@@ -80,7 +79,6 @@ export default function Posts({ url, handleClick }) {
         }
       );
   }, [deletePostId, isLoading, page]);
-  console.log(removePostId);
 
   if (error) {
     return <Text>API ERROR</Text>;

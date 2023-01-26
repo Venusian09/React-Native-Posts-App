@@ -20,7 +20,6 @@ export default function CommentsForm({ postId }) {
   const placeComment = () => {
     const url = `${BASE_URL}/posts/${postId}/comments`;
     const token = userInfo.token;
-    console.log(url, token);
 
     const ob = {
       content: comment,
@@ -36,7 +35,6 @@ export default function CommentsForm({ postId }) {
     })
       .then((result) => result.json())
       .then((res) => {
-        console.log(res);
         setComment("");
         passComment(res);
       });
