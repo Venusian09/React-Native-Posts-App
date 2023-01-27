@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: "50%",
-    marginBottom: 20,
     width: 100,
     marginTop: 20,
     marginRight: 40,
@@ -75,6 +74,7 @@ const styles = StyleSheet.create({
   buttonDontDelete: {
     paddingVertical: 15,
     paddingHorizontal: 30,
+    marginTop: 20,
     width: 100,
     textAlign: "center",
   },

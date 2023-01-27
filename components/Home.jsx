@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { globalStyles } from "../styles/Global";
 
-import HomeSlider from "./HomeSlider";
 import NewPosts from "./NewPosts";
 import SinglePost from "./SinglePost";
 import AddPost from "./AddPost";

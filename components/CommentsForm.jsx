@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  Keyboard,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -15,9 +16,10 @@ import { BASE_URL } from "../config";
 export default function CommentsForm({ postId }) {
   const [comment, setComment] = useState(null);
 
-  const { userInfo, passComment } = useContext(AuthContext);
+  const { userInfo, passComment, setIsLoading } = useContext(AuthContext);
 
   const placeComment = () => {
+    setIsLoading(true);
     const url = `${BASE_URL}/posts/${postId}/comments`;
     const token = userInfo.token;
 
@@ -37,6 +39,7 @@ export default function CommentsForm({ postId }) {
       .then((res) => {
         setComment("");
         passComment(res);
+        setIsLoading(true);
       });
   };
 
@@ -52,9 +55,12 @@ export default function CommentsForm({ postId }) {
       {comment && (
         <TouchableOpacity
           style={styles.sendButton}
-          onPress={() => placeComment()}
+          onPress={() => {
+            placeComment();
+            Keyboard.dismiss;
+          }}
         >
-          <Ionicons name="send" />
+          <Ionicons name="send" color="#ffffff" />
         </TouchableOpacity>
       )}
     </View>

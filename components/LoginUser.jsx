@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Button,
   Image,
+  Keyboard,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { globalStyles } from "../styles/Global";
@@ -41,6 +42,7 @@ export default function LoginUser() {
         <TouchableOpacity
           style={style.button}
           onPress={() => {
+            Keyboard.dismiss();
             if (email && password) {
               login(email, password);
             } else {

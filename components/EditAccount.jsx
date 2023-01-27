@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -36,80 +38,83 @@ export default function EditAccount() {
   const [password, setPassword] = useState(null);
 
   return (
-    <View>
-      <Spinner visible={isLoading} />
-      <Modal
-        swipeDirection={["down"]}
-        visible={showEditAccount}
-        modalTitle={
-          <View style={styles.heading}>
-            <TouchableOpacity onPress={() => setShowEditAccount(false)}>
-              <Ionicons name="close" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[globalStyles.primaryBtn, styles.addBtn]}
-              onPress={() => {
-                if (
-                  name !== userInfo.user.firstname ||
-                  lastname !== userInfo.user.lastname ||
-                  email !== userInfo.user.email
-                ) {
-                  editAccountDetails(name, lastname, email, password);
-                } else {
-                  alert("Dane się nie różnią!");
-                }
-              }}
-            >
-              <Text style={globalStyles.primaryBtnText}>Zapisz</Text>
-            </TouchableOpacity>
-          </View>
-        }
-        modalAnimation={
-          new SlideAnimation({
-            slideFrom: "bottom",
-          })
-        }
-        onSwipeOut={() => {
-          setShowEditAccount(false);
-        }}
-      >
-        <ModalContent style={styles.fullWidth}>
-          <Text style={styles.editNotice}>
-            Edycja danych skutkuje{" "}
-            <Text style={styles.editNoticeStrong}>wylogowaniem</Text>
-          </Text>
-          <TextInput
-            placeholder="Imię"
-            style={styles.input}
-            value={name}
-            onChangeText={(text) => setName(text)}
-            autoCapitalize="none"
-          />
-          <TextInput
-            placeholder="Nazwisko"
-            style={styles.input}
-            value={lastname}
-            onChangeText={(text) => setLastname(text)}
-            autoCapitalize="none"
-          />
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            autoCapitalize="none"
-          />
-          <TextInput
-            placeholder="Hasło"
-            style={styles.input}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
-        </ModalContent>
-      </Modal>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View>
+        <Spinner visible={isLoading} />
+        <Modal
+          swipeDirection={["down"]}
+          visible={showEditAccount}
+          modalTitle={
+            <View style={styles.heading}>
+              <TouchableOpacity onPress={() => setShowEditAccount(false)}>
+                <Ionicons name="close" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[globalStyles.primaryBtn, styles.addBtn]}
+                onPress={() => {
+                  if (
+                    name !== userInfo.user.firstname ||
+                    lastname !== userInfo.user.lastname ||
+                    email !== userInfo.user.email ||
+                    password
+                  ) {
+                    editAccountDetails(name, lastname, email, password);
+                  } else {
+                    alert("Dane się nie różnią!");
+                  }
+                }}
+              >
+                <Text style={globalStyles.primaryBtnText}>Zapisz</Text>
+              </TouchableOpacity>
+            </View>
+          }
+          modalAnimation={
+            new SlideAnimation({
+              slideFrom: "bottom",
+            })
+          }
+          onSwipeOut={() => {
+            setShowEditAccount(false);
+          }}
+        >
+          <ModalContent style={styles.fullWidth}>
+            <Text style={styles.editNotice}>
+              Edycja danych skutkuje{" "}
+              <Text style={styles.editNoticeStrong}>wylogowaniem</Text>
+            </Text>
+            <TextInput
+              placeholder="Imię"
+              style={styles.input}
+              value={name}
+              onChangeText={(text) => setName(text)}
+              autoCapitalize="none"
+            />
+            <TextInput
+              placeholder="Nazwisko"
+              style={styles.input}
+              value={lastname}
+              onChangeText={(text) => setLastname(text)}
+              autoCapitalize="none"
+            />
+            <TextInput
+              placeholder="Email"
+              style={styles.input}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              autoCapitalize="none"
+            />
+            <TextInput
+              placeholder="Hasło"
+              style={styles.input}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              autoCapitalize="none"
+              secureTextEntry={true}
+            />
+          </ModalContent>
+        </Modal>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

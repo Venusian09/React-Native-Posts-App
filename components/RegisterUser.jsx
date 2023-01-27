@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Button,
   Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { globalStyles } from "../styles/Global";
@@ -22,48 +24,51 @@ export default function RegisterUser() {
   const { isLoading, register } = useContext(AuthContext);
 
   return (
-    <View>
-      <Spinner visible={isLoading} />
-      <View style={style.wrapper}>
-        <View style={style.twoInputs}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View>
+        <Spinner visible={isLoading} />
+        <View style={style.wrapper}>
+          <View style={style.twoInputs}>
+            <TextInput
+              placeholder="Imię"
+              style={style.smallInput}
+              value={name}
+              onChangeText={(text) => setName(text)}
+            />
+            <TextInput
+              placeholder="Nazwisko"
+              style={style.smallInput}
+              value={lastName}
+              onChangeText={(text) => setLastName(text)}
+            />
+          </View>
           <TextInput
-            placeholder="Imię"
-            style={style.smallInput}
-            value={name}
-            onChangeText={(text) => setName(text)}
+            placeholder="Email"
+            style={style.input}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            autoCapitalize="none"
           />
           <TextInput
-            placeholder="Nazwisko"
-            style={style.smallInput}
-            value={lastName}
-            onChangeText={(text) => setLastName(text)}
+            placeholder="Hasło"
+            secureTextEntry={true}
+            style={style.input}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            autoCapitalize="none"
           />
+          <TouchableOpacity
+            style={style.button}
+            onPress={() => {
+              register(name, lastName, email, password);
+              Keyboard.dismiss();
+            }}
+          >
+            <Text style={style.buttonText}>Zarejestruj się</Text>
+          </TouchableOpacity>
         </View>
-        <TextInput
-          placeholder="Email"
-          style={style.input}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          autoCapitalize="none"
-        />
-        <TextInput
-          placeholder="Hasło"
-          secureTextEntry={true}
-          style={style.input}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          autoCapitalize="none"
-        />
-        <TouchableOpacity
-          style={style.button}
-          onPress={() => {
-            register(name, lastName, email, password);
-          }}
-        >
-          <Text style={style.buttonText}>Zarejestruj się</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

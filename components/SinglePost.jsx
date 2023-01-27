@@ -1,5 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
 import { globalStyles } from "../styles/Global";
@@ -29,16 +35,18 @@ export default function SinglePost({ navigation }) {
     return <Text> API ERROR</Text>;
   } else if (post) {
     return (
-      <View style={globalStyles.container}>
-        <Text style={globalStyles.textAuthor}>
-          {singlePost.postedBy.firstname} {singlePost.postedBy.lastname}
-        </Text>
-        <Text style={globalStyles.smallGrey}>
-          {singlePost.created.slice(0, 10)}
-        </Text>
-        <Text>{singlePost.content}</Text>
-        <Comments postId={singlePost._id} />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={globalStyles.container}>
+          <Text style={globalStyles.textAuthor}>
+            {singlePost.postedBy.firstname} {singlePost.postedBy.lastname}
+          </Text>
+          <Text style={globalStyles.smallGrey}>
+            {singlePost.created.slice(0, 10)}
+          </Text>
+          <Text>{singlePost.content}</Text>
+          <Comments postId={singlePost._id} />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

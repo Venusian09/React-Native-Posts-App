@@ -247,6 +247,7 @@ export const AuthProvider = ({ children }) => {
         deletePostComment,
         deleteComment,
         setDeleteComment,
+        setIsLoading,
       }}
     >
       {children}

@@ -38,6 +38,9 @@ export default function Comments({ postId }) {
         ) : (
           <View>
             <FlatList
+              keyExtractor={(item) => {
+                item._id;
+              }}
               data={comments}
               renderItem={({ item }) => (
                 <View>

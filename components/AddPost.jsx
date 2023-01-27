@@ -4,6 +4,8 @@ import {
   ModalContent,
   ModalTitle,
   SlideAnimation,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native-modals";
 import { StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -35,7 +37,10 @@ export default function AddPost() {
         visible={showAddPost}
         modalTitle={
           <View style={styles.heading}>
-            <TouchableOpacity onPress={() => setAddPost(false)}>
+            <TouchableOpacity
+              style={styles.close}
+              onPress={() => setAddPost(false)}
+            >
               <Ionicons name="close" />
             </TouchableOpacity>
             <TouchableOpacity
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "baseline",
-    paddingLeft: 15,
+    paddingLeft: 8,
     paddingRight: 15,
     paddingTop: 180,
     paddingBottom: 10,
@@ -104,5 +109,8 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     marginBottom: 0,
+  },
+  close: {
+    padding: 8,
   },
 });

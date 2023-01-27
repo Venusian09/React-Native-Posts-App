@@ -1,5 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Text, TextInput, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { StyleSheet } from "react-native";
 
 import { BASE_URL } from "../config";
@@ -43,15 +49,17 @@ export default function UserSearch({ navigation }) {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <TextInput
-        style={styles.textInput}
-        onChangeText={(text) => queryUsers(text)}
-        placeholder="Znajdź użytkownika"
-        multiline={true}
-      />
-      {text && <UserList users={users} navigation={navigation} />}
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={globalStyles.container}>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => queryUsers(text)}
+          placeholder="Znajdź użytkownika"
+          multiline={true}
+        />
+        {text && <UserList users={users} navigation={navigation} />}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

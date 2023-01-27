@@ -26,6 +26,7 @@ export default function Posts({ url, handleClick, isSingleUser }) {
     removePostId,
     setRemovePostId,
     setShowSingleUser,
+    setIsLoading,
   } = useContext(AuthContext);
 
   const token = userInfo.token;
@@ -40,25 +41,27 @@ export default function Posts({ url, handleClick, isSingleUser }) {
       setPage(page + 1);
     }
   };
+  let fetchUrl = "";
+  if (isSingleUser) {
+    fetchUrl = url;
+  } else {
+    fetchUrl = url + page;
+  }
   useEffect(() => {
-    if (removePostId) {
-      const index = posts.findIndex((obj) => obj._id === removePostId);
-      setPosts([...posts.slice(0, index), ...posts.slice(index + 1)]);
-      setRemovePostId(null);
-    }
     if (newPost) {
       setPage(1);
       setPosts(null);
       setData(null);
       setStopPagination(false);
       setNewPost(false);
+      setIsLoading(true);
     }
-    let fetchUrl = "";
-    if (isSingleUser) {
-      fetchUrl = url;
-    } else {
-      fetchUrl = url + page;
+    if (removePostId) {
+      const index = posts.findIndex((obj) => obj._id === removePostId);
+      setPosts([...posts.slice(0, index), ...posts.slice(index + 1)]);
+      setRemovePostId(null);
     }
+    // console.log(fetchUrl);
     fetch(fetchUrl, {
       method: "GET",
       headers: {
@@ -67,24 +70,22 @@ export default function Posts({ url, handleClick, isSingleUser }) {
       },
     })
       .then((response) => response.json())
-      .then(
-        (data) => {
-          if (!stopPagination) {
-            setData(data);
-            if (page == 1) {
-              setPosts([...data.docs]);
-            } else if (page > 1) {
-              setPosts([...posts, ...data.docs]);
-            }
-            if (page == data.totalPages) {
-              setStopPagination(true);
-            }
+      .then((data) => {
+        if (!stopPagination) {
+          setData(data);
+          if (page == 1) {
+            setPosts([...data.docs]);
+          } else if (page > 1) {
+            setPosts([...posts, ...data.docs]);
           }
-        },
-        (error) => {}
-      )
+          if (page == data.totalPages) {
+            setStopPagination(true);
+          }
+        }
+        setIsLoading(false);
+      })
       .catch((e) => console.log(e));
-  }, [deletePostId, isLoading, page, setShowSingleUser]);
+  }, [deletePostId, isLoading, page, setShowSingleUser, newPost]);
 
   if (error) {
     return <Text>API ERROR</Text>;
@@ -94,7 +95,7 @@ export default function Posts({ url, handleClick, isSingleUser }) {
         <View>
           <FlatList
             keyExtractor={(item) => {
-              item._id;
+              item._id.toString();
             }}
             data={posts}
             contentContainerStyle={{ paddingBottom: 80, marginBottom: 81000 }}
