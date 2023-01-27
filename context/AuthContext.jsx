@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
       .then((res) => res.json())
       .then((res) => {
         if (!res.user) {
-          alert(res.message);
+          alert(res.error);
         } else {
           setUserInfo(res);
           AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));

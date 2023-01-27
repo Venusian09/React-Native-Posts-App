@@ -35,11 +35,13 @@ export default function SingleUser({ user, navigation }) {
   return (
     <View>
       <Modal
-        swipeDirection={["down"]}
         visible={showSingleUser}
         modalTitle={
           <View>
-            <TouchableOpacity onPress={() => setShowSingleUser(false)}>
+            <TouchableOpacity
+              style={styles.close}
+              onPress={() => setShowSingleUser(false)}
+            >
               <Ionicons name="close" />
             </TouchableOpacity>
           </View>
@@ -49,9 +51,6 @@ export default function SingleUser({ user, navigation }) {
             slideFrom: "bottom",
           })
         }
-        onSwipeOut={() => {
-          setShowSingleUser(false);
-        }}
       >
         <ModalContent style={styles.fullWidth}>
           <View>
@@ -62,7 +61,12 @@ export default function SingleUser({ user, navigation }) {
             <Text style={globalStyles.smallGrey}>
               Z nami od: {user.joined.slice(0, 10)}
             </Text>
-            <Posts url={url} handleClick={handleClick} />
+            <Posts
+              url={url}
+              handleClick={handleClick}
+              isSingleUser={true}
+              style={styles.posts}
+            />
           </View>
         </ModalContent>
       </Modal>
@@ -72,7 +76,14 @@ export default function SingleUser({ user, navigation }) {
 
 const styles = StyleSheet.create({
   fullWidth: {
-    width: width,
+    width: width - 20,
     minHeight: 200,
+    maxHeight: 600,
+  },
+  close: {
+    padding: 8,
+  },
+  posts: {
+    maxHeight: 200,
   },
 });

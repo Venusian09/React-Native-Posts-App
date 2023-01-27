@@ -43,14 +43,21 @@ export default function Comments({ postId }) {
                 <View>
                   <View style={styles.commentsWrapper}>
                     <View style={styles.commentBox}>
-                      <Text style={styles.textAuthor}>Imię nazwisko</Text>
+                      <Text style={styles.textAuthor}>
+                        {item.postedBy.firstname} {item.postedBy.lastname}
+                      </Text>
                       <Text style={styles.textBody}>{item.content}</Text>
-                      <TouchableOpacity
-                        style={styles.deleteBtn}
-                        onPress={() => deletePostComment(item._id, item.post)}
-                      >
-                        <Text>X</Text>
-                      </TouchableOpacity>
+                      {userInfo.user._id == singlePost.postedBy._id ||
+                      userInfo.user._id == item.postedBy._id ? (
+                        <TouchableOpacity
+                          style={styles.deleteBtn}
+                          onPress={() => deletePostComment(item._id, item.post)}
+                        >
+                          <Text>X</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        ""
+                      )}
                     </View>
                   </View>
                 </View>
@@ -79,7 +86,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: "#f0f2f5",
     borderRadius: 18,
-    marginBottom: 12,
   },
   deleteBtn: {
     position: "absolute",

@@ -11,7 +11,7 @@ import { StyleSheet } from "react-native";
 import { globalStyles } from "../styles/Global";
 import DeletePostModal from "./DeletePostModal";
 
-export default function Posts({ url, handleClick }) {
+export default function Posts({ url, handleClick, isSingleUser }) {
   const {
     showDeleteModal,
     setDeleteModal,
@@ -25,6 +25,7 @@ export default function Posts({ url, handleClick }) {
     setNewPost,
     removePostId,
     setRemovePostId,
+    setShowSingleUser,
   } = useContext(AuthContext);
 
   const token = userInfo.token;
@@ -52,7 +53,13 @@ export default function Posts({ url, handleClick }) {
       setStopPagination(false);
       setNewPost(false);
     }
-    fetch(url + page, {
+    let fetchUrl = "";
+    if (isSingleUser) {
+      fetchUrl = url;
+    } else {
+      fetchUrl = url + page;
+    }
+    fetch(fetchUrl, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -74,11 +81,10 @@ export default function Posts({ url, handleClick }) {
             }
           }
         },
-        (error) => {
-          setError(error);
-        }
-      );
-  }, [deletePostId, isLoading, page]);
+        (error) => {}
+      )
+      .catch((e) => console.log(e));
+  }, [deletePostId, isLoading, page, setShowSingleUser]);
 
   if (error) {
     return <Text>API ERROR</Text>;

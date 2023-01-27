@@ -26,7 +26,7 @@ export default function DeletePostModal() {
       >
         <ModalContent>
           <Text style={globalStyles.center}>
-            Czy na pewno chcesz usunąć ten wpis? {deletePostId}
+            Czy na pewno chcesz usunąć ten wpis?
           </Text>
           <View style={styles.deleteBtns}>
             <TouchableOpacity
